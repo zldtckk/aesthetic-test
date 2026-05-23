@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="少儿审美敏感度测试 - 5分钟发现孩子的审美天赋">
+<title>少儿审美敏感度测试</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ==================== Welcome ==================== -->
+  <div id="welcome" class="screen active">
+    <div class="welcome-badge">免费测评</div>
+    <div class="welcome-icon">🎨</div>
+    <h1>少儿审美敏感度测试</h1>
+    <p class="subtitle">5 分钟，发现孩子的审美天赋</p>
+    <div class="welcome-sell">
+      <p><strong>AI 时代，审美是不可替代的核心竞争力。</strong></p>
+      <p>本测试从<b>色彩感、构图感、想象力、细节感知</b>四个维度，精准评估孩子的审美敏感度。</p>
+      <p>6-12 岁儿童适用，仅需 5 分钟，附赠专属审美发展报告。</p>
+    </div>
+    <button class="btn-primary" onclick="startTest()">开始测试</button>
+  </div>
+
+  <!-- ==================== Question ==================== -->
+  <div id="question" class="screen">
+    <div class="question-header">
+      <span class="question-counter" id="qCounter">1 / 7</span>
+      <span class="question-type-badge" id="qTypeBadge">文字观察</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:14%"></div>
+    </div>
+    <div id="question-content"></div>
+  </div>
+
+  <!-- ==================== Loading ==================== -->
+  <div id="loading" class="screen">
+    <div class="loading-spinner"></div>
+    <p>正在分析孩子的审美特质...</p>
+  </div>
+
+  <!-- ==================== Report ==================== -->
+  <div id="report" class="screen">
+    <div class="report-scroll" id="reportContent"></div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+//  Questions Data
+// ============================================================
+const questions = [
+  // -- Text Q1 --
+  {
+    type: 'text',
+    typeLabel: '文字观察',
+    question: '看到好看的绘本 / 风景 / 衣服，孩子会主动说「好看」并指给你看吗？',
+    options: [
+      { label: 'A', text: '经常主动分享，特别兴奋', score: 3 },
+      { label: 'B', text: '偶尔会说', score: 2 },
+      { label: 'C', text: '很少关注', score: 1 }
+    ]
+  },
+  // -- Text Q2 --
+  {
+    type: 'text',
+    typeLabel: '文字观察',
+    question: '画画时，孩子更在意「颜色搭配」还是「随便涂满」？',
+    options: [
+      { label: 'A', text: '会认真挑颜色，搭配得很舒服', score: 3 },
+      { label: 'B', text: '随便涂，开心就好', score: 2 },
+      { label: 'C', text: '不爱画画', score: 1 }
+    ]
+  },
+  // -- Text Q3 --
+  {
+    type: 'text',
+    typeLabel: '文字观察',
+    question: '选玩具 / 衣服时，孩子有自己明确的审美偏好吗？',
+    options: [
+      { label: 'A', text: '坚持选自己喜欢的风格', score: 3 },
+      { label: 'B', text: '听家长安排', score: 2 },
+      { label: 'C', text: '无所谓', score: 1 }
+    ]
+  },
+  // -- Visual Q4: Color --
+  {
+    type: 'visual',
+    typeLabel: '视觉看图',
+    question: '孩子第一眼会被哪组颜色吸引？',
+    visualHTML: `
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#0071e3;margin-bottom:4px;">A</div>
+          <div class="color-blocks">
+            <div class="block morandi-a"></div>
+            <div class="block morandi-b"></div>
+            <div class="block morandi-c"></div>
+            <div class="block morandi-d"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">柔和·高级</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
+          <div class="color-blocks">
+            <div class="block bright-a"></div>
+            <div class="block bright-b"></div>
+            <div class="block bright-c"></div>
+            <div class="block bright-d"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">鲜艳·明亮</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#86868b;margin-bottom:4px;">C</div>
+          <div class="color-blocks">
+            <div class="block messy-a"></div>
+            <div class="block messy-b"></div>
+            <div class="block messy-c"></div>
+            <div class="block messy-d"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">杂乱·混搭</div>
+        </div>
+      </div>`,
+    options: [
+      { label: 'A', text: '柔和、舒服、高级感', score: 3 },
+      { label: 'B', text: '鲜艳、明亮、活泼', score: 2 },
+      { label: 'C', text: '没规律、随便看', score: 1 }
+    ]
+  },
+  // -- Visual Q5: Composition --
+  {
+    type: 'visual',
+    typeLabel: '视觉看图',
+    question: '孩子觉得哪张图「最好看、最舒服」？',
+    visualHTML: `
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#0071e3;margin-bottom:4px;">A</div>
+          <div class="comp-box comp-balanced">
+            <div class="circle"></div>
+            <div class="rect"></div>
+            <div class="small"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">平衡·舒服</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
+          <div class="comp-box comp-centered">
+            <div class="circle"></div>
+            <div class="rect"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">居中·呆板</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#86868b;margin-bottom:4px;">C</div>
+          <div class="comp-box comp-cluttered">
+            <div class="circle"></div>
+            <div class="rect"></div>
+            <div class="small"></div>
+            <div class="small"></div>
+            <div class="small"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">杂乱·无序</div>
+        </div>
+      </div>`,
+    options: [
+      { label: 'A', text: '画面平衡、干净舒服', score: 3 },
+      { label: 'B', text: '简单直接、一目了然', score: 2 },
+      { label: 'C', text: '都差不多', score: 1 }
+    ]
+  },
+  // -- Visual Q6: Imagination --
+  {
+    type: 'visual',
+    typeLabel: '视觉看图',
+    question: '孩子更喜欢看 / 模仿哪一种？',
+    visualHTML: `
+      <div class="drawings-container">
+        <div class="drawing-card">
+          <div style="font-size:11px;font-weight:600;color:#0071e3;margin-bottom:4px;">A</div>
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect width="120" height="120" fill="#f9f9fb" rx="8"/>
+            <circle cx="45" cy="45" r="18" fill="#0071e3" opacity="0.8"/>
+            <circle cx="75" cy="55" r="12" fill="#af52de" opacity="0.7"/>
+            <path d="M30 75 Q45 60 60 80 Q75 65 90 75 Q95 70 100 90 L30 90Z" fill="#34c759" opacity="0.6"/>
+            <circle cx="35" cy="35" r="4" fill="#ffcc00"/>
+            <circle cx="55" cy="30" r="3" fill="#ff2d55"/>
+            <line x1="60" y1="80" x2="80" y2="95" stroke="#ff9500" stroke-width="2" opacity="0.6"/>
+            <circle cx="90" cy="25" r="5" fill="#5ac8fa" opacity="0.6"/>
+          </svg>
+          <div class="drawing-label">自由·创意</div>
+        </div>
+        <div class="drawing-card">
+          <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect width="120" height="120" fill="#f9f9fb" rx="8"/>
+            <circle cx="60" cy="40" r="20" fill="#d1d1d6"/>
+            <rect x="45" y="60" width="30" height="35" fill="#c7c7cc" rx="3"/>
+            <rect x="50" y="70" width="8" height="15" fill="#aeaeb2" rx="2"/>
+            <rect x="62" y="70" width="8" height="15" fill="#aeaeb2" rx="2"/>
+            <line x1="60" y1="40" x2="60" y2="60" stroke="#d1d1d6" stroke-width="2"/>
+          </svg>
+          <div class="drawing-label">标准·简笔</div>
+        </div>
+      </div>`,
+    options: [
+      { label: 'A', text: '自由、有想象力、独一无二', score: 3 },
+      { label: 'B', text: '标准、整齐、不会出错', score: 2 },
+      { label: 'C', text: '都不感兴趣', score: 1 }
+    ]
+  },
+  // -- Visual Q7: Detail --
+  {
+    type: 'visual',
+    typeLabel: '视觉看图',
+    question: '孩子会觉得哪一个「更好看、更用心」？',
+    visualHTML: `
+      <div class="detail-container">
+        <div class="detail-card">
+          <div style="font-size:11px;font-weight:600;color:#0071e3;margin-bottom:4px;">A</div>
+          <div class="detail-preview detail-detailed">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div class="drawing-label">精致·有细节</div>
+        </div>
+        <div class="detail-card">
+          <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
+          <div class="detail-preview detail-simple">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div class="drawing-label">简单·粗糙</div>
+        </div>
+      </div>`,
+    options: [
+      { label: 'A', text: '精致、有细节、很讲究', score: 3 },
+      { label: 'B', text: '简单、大方、不复杂', score: 2 },
+      { label: 'C', text: '没感觉', score: 1 }
+    ]
+  }
+];
+
+// ============================================================
+//  Report Templates
+// ============================================================
+const reports = {
+  talent: {
+    badge: '🌟',
+    name: '审美天赋型',
+    tagline: 'Top 30% · 天生敏感 · 审美出众',
+    color: '#34c759',
+    keywords: ['天生敏感', '色彩感强', '构图感好', '想象力丰富'],
+    strengths: [
+      '对美有天然感知力，能主动发现和欣赏生活中的美',
+      '色彩搭配直觉出色，用色大胆且和谐',
+      '构图意识强，画面组织有balance感',
+      '审美品味突出，有自己明确的喜好和判断'
+    ],
+    aiValue: '创造力 + 审美力是 AI 无法替代的核心能力。孩子的天生审美敏感度，是未来最稀缺的竞争力。',
+    advice: '重点发展艺术感知与创意表达，多接触高品质的艺术作品、设计、自然美学。避免被模板化教学限制，鼓励自由创作和审美表达。'
+  },
+  potential: {
+    badge: '🌱',
+    name: '审美潜力型',
+    tagline: 'Top 80% · 基础良好 · 可塑性强',
+    color: '#ff9500',
+    keywords: ['基础好', '可塑性强', '愿意感受', '潜力大'],
+    strengths: [
+      '有一定的审美意识，愿意接触和感受美',
+      '对色彩、构图有基本的感知能力',
+      '经过系统引导后，审美能力提升空间极大',
+      '处于审美启蒙的关键窗口期'
+    ],
+    aiValue: '审美是未来核心竞争力，现在开始培养性价比最高。孩子的审美潜力一旦被激活，将成为伴随一生的优势。',
+    advice: '系统进行审美启蒙 + 美术基础训练，从色彩认知、构图原理、艺术欣赏入手。坚持半年左右，审美气质会有明显提升。'
+  },
+  beginner: {
+    badge: '🌿',
+    name: '审美待启蒙',
+    tagline: 'Top 100% · 黄金启蒙期 · 潜力无限',
+    color: '#af52de',
+    keywords: ['兴趣待激发', '感知待培养', '年龄小', '无限可能'],
+    strengths: [
+      '年龄尚小，审美观尚未固化，可塑性极强',
+      '正处于审美启蒙的黄金时期',
+      '没有固定思维模式，吸收能力强',
+      '一旦建立审美认知，进步会非常迅速'
+    ],
+    aiValue: '知识可以被 AI 替代，但审美越早培养，未来差距越大。现在就是开始审美启蒙的最佳时机。',
+    advice: '从色彩感知、构图欣赏、艺术体验开始，用游戏化的方式建立审美认知。多带孩子观察自然、欣赏艺术作品、接触美好事物，快速建立审美基础。'
+  }
+};
+
+// ============================================================
+//  App State
+// ============================================================
+let currentQuestion = 0;
+let answers = [];
+let scores = [];
+
+// ============================================================
+//  Screen Management
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // Scroll to top
+  document.getElementById(id).scrollTop = 0;
+}
+
+// ============================================================
+//  Welcome
+// ============================================================
+function startTest() {
+  currentQuestion = 0;
+  answers = [];
+  scores = [];
+  showScreen('question');
+  renderQuestion();
+}
+
+// ============================================================
+//  Question Rendering
+// ============================================================
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const counter = document.getElementById('qCounter');
+  const typeBadge = document.getElementById('qTypeBadge');
+  const progress = document.getElementById('progressFill');
+  const container = document.getElementById('question-content');
+
+  counter.textContent = `${currentQuestion + 1} / ${questions.length}`;
+  typeBadge.textContent = q.typeLabel;
+  progress.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+  let visualPart = '';
+  if (q.visualHTML) {
+    visualPart = `<div class="visual-display fade-in">${q.visualHTML}</div>`;
+  }
+
+  let optionsHTML = q.options.map((opt, i) => `
+    <button class="option-btn" onclick="selectOption(${i})" data-index="${i}">
+      <span class="option-label">${opt.label}</span>
+      <span class="option-text">${opt.text}</span>
+    </button>
+  `).join('');
+
+  container.innerHTML = `
+    <div class="question-text fade-in">${q.question}</div>
+    ${visualPart}
+    <div class="options-list fade-in" style="animation-delay:0.1s">
+      ${optionsHTML}
+    </div>
+  `;
+}
+
+// ============================================================
+//  Option Selection
+// ============================================================
+function selectOption(index) {
+  // Prevent double-click
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.style.pointerEvents = 'none');
+
+  // Mark selected
+  btns[index].classList.add('selected');
+
+  const q = questions[currentQuestion];
+  answers[currentQuestion] = index;
+  scores[currentQuestion] = q.options[index].score;
+
+  // Next question or finish
+  setTimeout(() => {
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }, 300);
+}
+
+// ============================================================
+//  Results
+// ============================================================
+function showResults() {
+  showScreen('loading');
+
+  // Simulate analysis delay
+  setTimeout(() => {
+    const total = scores.reduce((a, b) => a + b, 0);
+    const maxScore = questions.length * 3;
+    const percentage = (total / maxScore) * 100;
+
+    let tier;
+    if (percentage >= 80) {
+      tier = 'talent';
+    } else if (percentage >= 50) {
+      tier = 'potential';
+    } else {
+      tier = 'beginner';
+    }
+
+    const report = reports[tier];
+    const lightColors = { talent: '#e8f8ee', potential: '#fff3e0', beginner: '#f3e8ff' };
+    const lightBg = lightColors[tier] || '#f0f0f0';
+    const container = document.getElementById('reportContent');
+
+    container.innerHTML = `
+      <div class="report-header slide-up">
+        <div class="report-badge">${report.badge}</div>
+        <div class="report-type" style="color:${report.color}">${report.name}</div>
+        <div class="report-tagline">${report.tagline}</div>
+      </div>
+
+      <div class="report-card slide-up" style="animation-delay:0.1s">
+        <h3>🏷️ 关键词</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          ${report.keywords.map(k => `<span style="background:${lightBg};color:${report.color};padding:4px 14px;border-radius:20px;font-size:13px;font-weight:500;">${k}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="report-card slide-up" style="animation-delay:0.15s">
+        <h3>💡 核心优势</h3>
+        <ul>
+          ${report.strengths.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="report-card slide-up" style="animation-delay:0.2s">
+        <h3>🤖 AI 时代价值</h3>
+        <p>${report.aiValue}</p>
+      </div>
+
+      <div class="report-card slide-up" style="animation-delay:0.25s">
+        <h3>📈 培养建议</h3>
+        <p>${report.advice}</p>
+      </div>
+
+      <div class="report-cta slide-up" style="animation-delay:0.3s">
+        <h3>🎯 凭报告到店领取专属福利</h3>
+        <p>AI 时代，成绩可以被 AI 超越，<br><strong>审美、品味、创造力</strong>才是孩子的核心竞争力！</p>
+        <p style="font-size:13px;">凭本报告到店，免费领取 <strong>1v1 专属审美解读</strong> + <strong>定制培养方案</strong>，帮孩子赢在未来！</p>
+        <button class="btn-cta" onclick="contactStore()">立即预约到店</button>
+      </div>
+
+      <div class="report-footer">
+        <p style="font-size:13px;color:#86868b;line-height:1.6;">
+          🤖 知识可以被 AI 替代，<br>
+          但 <strong style="color:#1d1d1f;">审美、品味、创造力</strong> 才是孩子未来的核心竞争力。
+        </p>
+        <button class="re-share-btn" onclick="restartTest()">再测一次</button>
+      </div>
+    `;
+
+    showScreen('report');
+  }, 1800);
+}
+
+// ============================================================
+//  Restart
+// ============================================================
+function restartTest() {
+  currentQuestion = 0;
+  answers = [];
+  scores = [];
+  showScreen('welcome');
+  document.getElementById('reportContent').innerHTML = '';
+}
+
+function contactStore() {
+  alert('📞 请联系我们预约到店：\n\n🏠 地址：XXX 艺术教育中心\n📱 电话：138-XXXX-XXXX\n\n（请将这里的联系方式替换为您的实际信息）');
+}
+</script>
+
+</body>
+</html>
