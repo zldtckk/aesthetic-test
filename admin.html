@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>审美测试 - 管理后台</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  min-height: 100vh;
+}
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e8e8ed;
+  padding: 16px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header h1 { font-size: 18px; font-weight: 700; }
+.header .sub { font-size: 12px; color: #86868b; margin-top: 2px; }
+
+.search-section {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.search-box {
+  display: flex;
+  gap: 10px;
+}
+.search-box input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 2px solid #e8e8ed;
+  border-radius: 12px;
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 2px;
+  outline: none;
+  transition: border-color 0.2s;
+  text-transform: uppercase;
+}
+.search-box input:focus {
+  border-color: #0071e3;
+}
+.search-box button {
+  padding: 14px 24px;
+  background: #0071e3;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.search-box button:active { opacity: 0.8; }
+
+.hint { font-size: 12px; color: #aeaeb2; margin-top: 8px; text-align: center; }
+
+/* Report */
+#report-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+.not-found {
+  text-align: center;
+  padding: 40px 20px;
+  color: #ff3b30;
+}
+.not-found p { font-size: 16px; }
+
+.loading { text-align: center; padding: 40px; color: #86868b; }
+
+.report-header { text-align: center; margin-bottom: 24px; }
+.report-header .badge { font-size: 48px; display: block; margin-bottom: 8px; }
+.report-header .type { font-size: 24px; font-weight: 700; }
+.report-header .tagline { font-size: 14px; color: #86868b; margin-top: 4px; }
+.report-header .code {
+  font-size: 13px; color: #aeaeb2; margin-top: 8px;
+  font-family: 'Courier New', monospace;
+  background: #f5f5f7;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.scores-bar {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.scores-bar .score-item { text-align: center; }
+.scores-bar .score-item .num {
+  font-size: 24px;
+  font-weight: 700;
+}
+.scores-bar .score-item .lbl {
+  font-size: 11px;
+  color: #86868b;
+  margin-top: 2px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  font-size: 14px;
+  color: #86868b;
+  line-height: 1.6;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.card ul li::before {
+  content: '•';
+  position: absolute;
+  left: 4px;
+  color: #0071e3;
+}
+.card p {
+  font-size: 14px;
+  color: #86868b;
+  line-height: 1.7;
+}
+
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.keywords span {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.answers-list { }
+.answer-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+.answer-item:last-child { border-bottom: none; }
+.answer-item .q-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #86868b;
+}
+.answer-item .q-type {
+  font-size: 11px;
+  color: #aeaeb2;
+  flex-shrink: 0;
+  width: 40px;
+}
+.answer-item .q-text { flex: 1; color: #1d1d1f; line-height: 1.4; }
+.answer-item .q-score {
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 13px;
+  width: 30px;
+  text-align: right;
+}
+
+@media (max-width: 430px) {
+  .search-section { padding: 16px; }
+  #report-container { padding: 0 16px 40px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎨 审美测试管理后台</h1>
+  <div class="sub">输入领取码查看完整测试报告</div>
+</div>
+
+<div class="search-section">
+  <div class="search-box">
+    <input type="text" id="codeInput" placeholder="AST-0000-XX" maxlength="12" autocomplete="off" spellcheck="false">
+    <button onclick="searchReport()">查询</button>
+  </div>
+  <div class="hint">请输入用户测试完成后得到的领取码，例如 AST-3847-KF</div>
+</div>
+
+<div id="report-container"></div>
+
+<script>
+function searchReport() {
+  const input = document.getElementById('codeInput');
+  const code = input.value.trim().toUpperCase();
+  if (!code) {
+    input.focus();
+    return;
+  }
+
+  const container = document.getElementById('report-container');
+  container.innerHTML = '<div class="loading">🔍 正在查询...</div>';
+
+  fetch('/api/report/' + encodeURIComponent(code))
+    .then(res => {
+      if (!res.ok) {
+        if (res.status === 404) throw new Error('NOT_FOUND');
+        throw new Error('SERVER_ERROR');
+      }
+      return res.json();
+    })
+    .then(data => renderReport(data, container))
+    .catch(err => {
+      if (err.message === 'NOT_FOUND') {
+        container.innerHTML = `
+          <div class="not-found">
+            <p style="font-size:40px;margin-bottom:12px;">🔍</p>
+            <p style="font-weight:600;">未找到该领取码</p>
+            <p style="font-size:14px;color:#86868b;margin-top:8px;">请确认输入正确，或检查该领取码是否已过期</p>
+          </div>`;
+      } else {
+        container.innerHTML = `
+          <div class="not-found">
+            <p style="font-size:40px;margin-bottom:12px;">⚠️</p>
+            <p style="font-weight:600;">查询失败</p>
+            <p style="font-size:14px;color:#86868b;margin-top:8px;">请检查网络连接或稍后重试</p>
+          </div>`;
+      }
+    });
+}
+
+function renderReport(data, container) {
+  const r = data.report;
+  const lightColors = { talent: '#e8f8ee', potential: '#fff3e0', beginner: '#f3e8ff' };
+  const lightBg = lightColors[data.tier] || '#f0f0f0';
+
+  const answersTotal = data.answers ? data.answers.length : 0;
+  const maxScore = answersTotal * 3;
+  const pct = maxScore > 0 ? Math.round((data.total / maxScore) * 100) : 0;
+
+  let answersHTML = '';
+  if (data.scores && questions) {
+    data.scores.forEach((s, i) => {
+      const q = questions[i];
+      if (!q) return;
+      answersHTML += `
+        <div class="answer-item">
+          <span class="q-num">${i+1}</span>
+          <span class="q-type">${q.typeLabel || ''}</span>
+          <span class="q-text">${q.question}</span>
+          <span class="q-score" style="color:${s >= 3 ? '#34c759' : s >= 2 ? '#ff9500' : '#ff3b30'}">${s}</span>
+        </div>`;
+    });
+  }
+
+  container.innerHTML = `
+    <div class="report-header">
+      <span class="badge">${r.badge}</span>
+      <div class="type" style="color:${r.color}">${r.name}</div>
+      <div class="tagline">${r.tagline}</div>
+      <div class="code">领取码: ${data.code}</div>
+    </div>
+
+    <div class="scores-bar">
+      <div class="score-item">
+        <div class="num" style="color:${r.color}">${data.total}</div>
+        <div class="lbl">总分 (${pct}%)</div>
+      </div>
+      <div class="score-item">
+        <div class="num" style="color:${r.color}">${maxScore}</div>
+        <div class="lbl">满分</div>
+      </div>
+      <div class="score-item">
+        <div class="num" style="color:#86868b">${answersTotal}</div>
+        <div class="lbl">答题数</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🏷️ 关键词</h3>
+      <div class="keywords">
+        ${r.keywords.map(k => `<span style="background:${lightBg};color:${r.color};">${k}</span>`).join('')}
+      </div>
+    </div>
+
+    ${answersHTML ? `
+    <div class="card">
+      <h3>📝 答题详情</h3>
+      <div class="answers-list">${answersHTML}</div>
+    </div>` : ''}
+
+    <div class="card">
+      <h3>💡 核心优势</h3>
+      <ul>
+        ${r.strengths.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🤖 AI 时代价值</h3>
+      <p>${r.aiValue}</p>
+    </div>
+
+    <div class="card">
+      <h3>📈 培养建议</h3>
+      <p>${r.advice}</p>
+    </div>
+
+    <div style="text-align:center;padding:16px 0;font-size:12px;color:#aeaeb2;">
+      测试时间: ${new Date(data.timestamp).toLocaleString('zh-CN')}
+    </div>
+  `;
+}
+
+// Inline questions data for answer display
+const questions = [
+  { typeLabel: '文字', question: '看到好看的绘本插画、风景或衣服搭配，孩子通常会？' },
+  { typeLabel: '文字', question: '画画时，孩子对颜色搭配的态度是？' },
+  { typeLabel: '文字', question: '选衣服/玩具时，孩子的审美坚持程度？' },
+  { typeLabel: '文字', question: '看到不协调的颜色搭配或杂乱环境，孩子的反应是？' },
+  { typeLabel: '文字', question: '看完绘本/动画片后，孩子会模仿画风或角色设计吗？' },
+  { typeLabel: '文字', question: '搭积木/做手工时，孩子会注意颜色和形状的整体效果吗？' },
+  { typeLabel: '视觉', question: '孩子第一眼会被哪组颜色吸引？（色块）' },
+  { typeLabel: '视觉', question: '孩子觉得哪张图最好看最舒服？（构图）' },
+  { typeLabel: '视觉', question: '孩子更喜欢看/模仿哪一种？（创意 vs 标准）' },
+  { typeLabel: '视觉', question: '孩子会觉得哪一个更好看更用心？（细节）' },
+  { typeLabel: '视觉', question: '孩子觉得哪种排列看起来最舒服？（图案）' },
+  { typeLabel: '视觉', question: '哪组色彩氛围让孩子感觉最舒服？（冷暖）' }
+];
+
+// Enter key to search
+document.getElementById('codeInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') searchReport();
+});
+
+// Auto-capitalize input
+document.getElementById('codeInput').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+});
+</script>
+
+</body>
+</html>

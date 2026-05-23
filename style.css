@@ -67,6 +67,11 @@ html, body {
   display: flex;
 }
 
+/* Question screen: less top padding to move text up */
+#question.screen {
+  padding-top: 14px;
+}
+
 /* ============================================
    Welcome Screen
    ============================================ */
@@ -190,7 +195,7 @@ html, body {
   height: 4px;
   background: #e8e8ed;
   border-radius: 2px;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
   overflow: hidden;
 }
 
@@ -211,17 +216,17 @@ html, body {
   font-size: 20px;
   font-weight: 600;
   line-height: 1.4;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 /* Visual display area for Q4-Q7 */
 .visual-display {
   background: var(--card);
   border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 20px;
+  padding: 12px;
+  margin-bottom: 12px;
   box-shadow: var(--shadow-sm);
-  min-height: 140px;
+  min-height: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,17 +235,17 @@ html, body {
 .options-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
 }
 
 .option-btn {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  padding: 14px 16px;
+  padding: 12px 14px;
   background: var(--card);
   border: 2px solid #e8e8ed;
   border-radius: var(--radius-sm);
@@ -521,6 +526,57 @@ html, body {
 .temp-mix-b { background: #00f5d4; }
 .temp-mix-c { background: #ffbe0b; }
 .temp-mix-d { background: #3a86ff; }
+
+/* ============================================
+   Simplified Report / Claim Code
+   ============================================ */
+.simple-result {
+  text-align: center;
+  padding-top: 20px;
+}
+.simple-result .badge {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 8px;
+}
+.simple-result .type-name {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.simple-result .tagline {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.claim-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  border: 2px dashed var(--accent);
+}
+.claim-section .label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.claim-section .code {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  font-family: 'Courier New', monospace;
+}
+.claim-section .hint {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 500;
+}
 
 /* ============================================
    Loading Screen

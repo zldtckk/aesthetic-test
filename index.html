@@ -526,64 +526,80 @@ function selectOption(index) {
 // ============================================================
 //  Results
 // ============================================================
+function generateCode() {
+  const num = Math.floor(1000 + Math.random() * 9000);
+  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const l1 = letters[Math.floor(Math.random() * letters.length)];
+  const l2 = letters[Math.floor(Math.random() * letters.length)];
+  return `AST-${num}-${l1}${l2}`;
+}
+
+function getTier(total) {
+  const maxScore = questions.length * 3;
+  const percentage = (total / maxScore) * 100;
+  if (percentage >= 80) return 'talent';
+  if (percentage >= 50) return 'potential';
+  return 'beginner';
+}
+
 function showResults() {
   showScreen('loading');
 
-  // Simulate analysis delay
+  const total = scores.reduce((a, b) => a + b, 0);
+  const tier = getTier(total);
+  const report = reports[tier];
+  const claimCode = generateCode();
+  const baseUrl = window.location.origin.includes('localhost')
+    ? 'http://localhost:3000'
+    : window.location.origin;
+
+  // Submit to backend
+  fetch(baseUrl + '/api/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      code: claimCode,
+      tier: tier,
+      total: total,
+      answers: answers,
+      scores: scores,
+      timestamp: new Date().toISOString()
+    })
+  }).catch(() => {
+    // Backend offline — store locally as fallback
+    const data = JSON.parse(localStorage.getItem('ast_results') || '{}');
+    data[claimCode] = { tier, total, answers, scores, timestamp: new Date().toISOString() };
+    localStorage.setItem('ast_results', JSON.stringify(data));
+  });
+
+  // Show simplified result after short delay
   setTimeout(() => {
-    const total = scores.reduce((a, b) => a + b, 0);
-    const maxScore = questions.length * 3;
-    const percentage = (total / maxScore) * 100;
-
-    let tier;
-    if (percentage >= 80) {
-      tier = 'talent';
-    } else if (percentage >= 50) {
-      tier = 'potential';
-    } else {
-      tier = 'beginner';
-    }
-
-    const report = reports[tier];
-    const lightColors = { talent: '#e8f8ee', potential: '#fff3e0', beginner: '#f3e8ff' };
-    const lightBg = lightColors[tier] || '#f0f0f0';
     const container = document.getElementById('reportContent');
 
     container.innerHTML = `
-      <div class="report-header slide-up">
-        <div class="report-badge">${report.badge}</div>
-        <div class="report-type" style="color:${report.color}">${report.name}</div>
-        <div class="report-tagline">${report.tagline}</div>
+      <div class="simple-result slide-up">
+        <span class="badge">${report.badge}</span>
+        <div class="type-name" style="color:${report.color}">${report.name}</div>
+        <div class="tagline">${report.tagline}</div>
       </div>
 
-      <div class="report-card slide-up" style="animation-delay:0.1s">
-        <h3>🏷️ 关键词</h3>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;">
-          ${report.keywords.map(k => `<span style="background:${lightBg};color:${report.color};padding:4px 14px;border-radius:20px;font-size:13px;font-weight:500;">${k}</span>`).join('')}
-        </div>
+      <div class="claim-section slide-up" style="animation-delay:0.1s">
+        <div class="label">👇 到店时出示此领取码</div>
+        <div class="code">${claimCode}</div>
+        <div class="hint">📱 截图保存，到店更快核销</div>
       </div>
 
       <div class="report-card slide-up" style="animation-delay:0.15s">
-        <h3>💡 核心优势</h3>
-        <ul>
-          ${report.strengths.map(s => `<li>${s}</li>`).join('')}
-        </ul>
+        <h3>📋 测试完成！</h3>
+        <p>完整审美发展报告已为您生成，包含：<br>
+        <strong>关键词解析 · 核心优势分析 · AI时代价值 · 定制培养建议</strong></p>
+        <p style="margin-top:10px;">请携带上方领取码到店，我们的专业老师将为您进行 <strong>1v1 专属审美解读</strong>，并提供完整的纸质报告和定制培养方案。</p>
       </div>
 
-      <div class="report-card slide-up" style="animation-delay:0.2s">
-        <h3>🤖 AI 时代价值</h3>
-        <p>${report.aiValue}</p>
-      </div>
-
-      <div class="report-card slide-up" style="animation-delay:0.25s">
-        <h3>📈 培养建议</h3>
-        <p>${report.advice}</p>
-      </div>
-
-      <div class="report-cta slide-up" style="animation-delay:0.3s">
-        <h3>🎯 凭报告到店领取专属福利</h3>
+      <div class="report-cta slide-up" style="animation-delay:0.2s">
+        <h3>🎯 凭码到店领取完整报告</h3>
         <p>AI 时代，成绩可以被 AI 超越，<br><strong>审美、品味、创造力</strong>才是孩子的核心竞争力！</p>
-        <p style="font-size:13px;">凭本报告到店，免费领取 <strong>1v1 专属审美解读</strong> + <strong>定制培养方案</strong>，帮孩子赢在未来！</p>
+        <p style="font-size:13px;">免费领取 <strong>1v1 专属审美解读</strong> + <strong>定制培养方案</strong></p>
         <button class="btn-cta" onclick="contactStore()">立即预约到店</button>
       </div>
 
@@ -597,7 +613,7 @@ function showResults() {
     `;
 
     showScreen('report');
-  }, 1800);
+  }, 1500);
 }
 
 // ============================================================
