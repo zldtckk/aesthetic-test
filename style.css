@@ -493,6 +493,35 @@ html, body {
 .pat-random .pat-dot:nth-child(5) { top: 10px; left: 155px; }
 .pat-random .pat-dot:nth-child(6) { top: 75px; left: 100px; }
 
+/* -- Q12: Color Temperature -- */
+.temp-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.temp-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  display: inline-block;
+}
+/* Warm palette */
+.temp-warm-a { background: #ff6b35; }
+.temp-warm-b { background: #f7c59f; }
+.temp-warm-c { background: #ffbe0b; }
+.temp-warm-d { background: #fb5607; }
+/* Cool palette */
+.temp-cool-a { background: #0077b6; }
+.temp-cool-b { background: #90e0ef; }
+.temp-cool-c { background: #00b4d8; }
+.temp-cool-d { background: #023e8a; }
+/* Contrast mix */
+.temp-mix-a { background: #ff006e; }
+.temp-mix-b { background: #00f5d4; }
+.temp-mix-c { background: #ffbe0b; }
+.temp-mix-d { background: #3a86ff; }
+
 /* ============================================
    Loading Screen
    ============================================ */

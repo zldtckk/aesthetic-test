@@ -285,6 +285,101 @@ const questions = [
       { label: 'B', text: '简单大方、不复杂就好', score: 2 },
       { label: 'C', text: '没太大感觉，不关心', score: 1 }
     ]
+  },
+  // ======= Visual Q11: Pattern & Rhythm (NEW) =======
+  {
+    type: 'visual',
+    typeLabel: '视觉看图',
+    question: '仔细看下面三种排列方式，孩子觉得哪种「看起来最舒服、最有美感」？',
+    visualHTML: `
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#0071e3;margin-bottom:4px;">A</div>
+          <div class="pattern-box pat-rhythm">
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">有节奏·渐变递进</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
+          <div class="pattern-box pat-sym">
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">对称整齐·平衡稳定</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#86868b;margin-bottom:4px;">C</div>
+          <div class="pattern-box pat-random">
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+            <div class="pat-dot"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">随意散落·无规律</div>
+        </div>
+      </div>`,
+    options: [
+      { label: 'A', text: '有节奏感、由小到大渐变，看起来很舒服', score: 3 },
+      { label: 'B', text: '对称整齐、两边一样，看起来很稳定', score: 2 },
+      { label: 'C', text: '都差不多，没有特别感觉', score: 1 }
+    ]
+  },
+  // ======= Visual Q12: Color Temperature (NEW) =======
+  {
+    type: 'visual',
+    typeLabel: '视觉看图',
+    question: '下面三组色彩氛围，孩子觉得哪一组「让 ta 感觉最舒服/最开心」？',
+    visualHTML: `
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#ff6b35;margin-bottom:4px;">A</div>
+          <div class="color-blocks">
+            <div class="temp-box temp-warm-a"></div>
+            <div class="temp-box temp-warm-b"></div>
+            <div class="temp-box temp-warm-c"></div>
+            <div class="temp-box temp-warm-d"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">温暖·阳光·活力</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#0077b6;margin-bottom:4px;">B</div>
+          <div class="color-blocks">
+            <div class="temp-box temp-cool-a"></div>
+            <div class="temp-box temp-cool-b"></div>
+            <div class="temp-box temp-cool-c"></div>
+            <div class="temp-box temp-cool-d"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">冷静·清爽·安宁</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;font-weight:600;color:#86868b;margin-bottom:4px;">C</div>
+          <div class="color-blocks">
+            <div class="temp-box temp-mix-a"></div>
+            <div class="temp-box temp-mix-b"></div>
+            <div class="temp-box temp-mix-c"></div>
+            <div class="temp-box temp-mix-d"></div>
+          </div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">浓烈·碰撞·刺激</div>
+        </div>
+      </div>`,
+    options: [
+      { label: 'A', text: '温暖阳光的色调，感觉很舒服很开心', score: 3 },
+      { label: 'B', text: '冷静清爽的色调，感觉很放松很安静', score: 2 },
+      { label: 'C', text: '浓烈碰撞的色调，感觉很刺激很特别', score: 1 }
+    ]
   }
 ];
 
