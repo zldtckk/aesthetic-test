@@ -55,44 +55,77 @@
 //  Questions Data
 // ============================================================
 const questions = [
-  // -- Text Q1 --
+  // ======= Text Q1 =======
   {
     type: 'text',
     typeLabel: '文字观察',
-    question: '看到好看的绘本 / 风景 / 衣服，孩子会主动说「好看」并指给你看吗？',
+    question: '看到好看的绘本插画、美丽的风景或漂亮衣服搭配，孩子通常会怎么做？',
     options: [
-      { label: 'A', text: '经常主动分享，特别兴奋', score: 3 },
-      { label: 'B', text: '偶尔会说', score: 2 },
-      { label: 'C', text: '很少关注', score: 1 }
+      { label: 'A', text: '主动兴奋地分享，并能说出具体喜欢哪里（如"这个颜色好温柔""这个图案好有趣"）', score: 3 },
+      { label: 'B', text: '会说「好看」，但不太会具体描述为什么好看', score: 2 },
+      { label: 'C', text: '很少主动关注或表达对视觉美的感受', score: 1 }
     ]
   },
-  // -- Text Q2 --
+  // ======= Text Q2 =======
   {
     type: 'text',
     typeLabel: '文字观察',
-    question: '画画时，孩子更在意「颜色搭配」还是「随便涂满」？',
+    question: '画画时，孩子对颜色搭配的态度是怎样的？',
     options: [
-      { label: 'A', text: '会认真挑颜色，搭配得很舒服', score: 3 },
-      { label: 'B', text: '随便涂，开心就好', score: 2 },
-      { label: 'C', text: '不爱画画', score: 1 }
+      { label: 'A', text: '会精心挑选和搭配颜色，画面有主色调和点缀色，整体和谐有想法', score: 3 },
+      { label: 'B', text: '喜欢用某几种固定颜色，不太在意颜色之间的搭配关系', score: 2 },
+      { label: 'C', text: '抓到什么颜色用什么，涂满整张纸是唯一目标', score: 1 }
     ]
   },
-  // -- Text Q3 --
+  // ======= Text Q3 =======
   {
     type: 'text',
     typeLabel: '文字观察',
-    question: '选玩具 / 衣服时，孩子有自己明确的审美偏好吗？',
+    question: '选衣服或玩具时，孩子的审美坚持程度如何？',
     options: [
-      { label: 'A', text: '坚持选自己喜欢的风格', score: 3 },
-      { label: 'B', text: '听家长安排', score: 2 },
-      { label: 'C', text: '无所谓', score: 1 }
+      { label: 'A', text: '有非常明确的个人偏好，会坚持自己的选择，且能说出理由（如"这个图案像我在故事里看到的"）', score: 3 },
+      { label: 'B', text: '有偏好，但容易被他人意见或新出现的选项影响', score: 2 },
+      { label: 'C', text: '完全无所谓，家长决定就好', score: 1 }
     ]
   },
-  // -- Visual Q4: Color --
+  // ======= Text Q4 =======
+  {
+    type: 'text',
+    typeLabel: '文字观察',
+    question: '看到不协调的颜色搭配（如大红配大绿）、杂乱的房间摆放，孩子的反应是？',
+    options: [
+      { label: 'A', text: '会主动指出「这样不好看」「好乱呀」，表现出对和谐感的敏感', score: 3 },
+      { label: 'B', text: '被提醒或引导后能意识到不协调', score: 2 },
+      { label: 'C', text: '完全没感觉，不在意视觉上的协调与否', score: 1 }
+    ]
+  },
+  // ======= Text Q5 =======
+  {
+    type: 'text',
+    typeLabel: '文字观察',
+    question: '看完绘本或动画片后，孩子会模仿其中的画风、配色或者角色设计吗？',
+    options: [
+      { label: 'A', text: '会模仿并在其中加入自己的创意改编，形成新的想法', score: 3 },
+      { label: 'B', text: '会照着画或模仿，但基本忠实于原作，很少改动', score: 2 },
+      { label: 'C', text: '看完就看完了，不会去模仿或回忆画面', score: 1 }
+    ]
+  },
+  // ======= Text Q6 =======
+  {
+    type: 'text',
+    typeLabel: '文字观察',
+    question: '孩子在搭积木、拼乐高或做手工时，会注意颜色和形状的整体效果吗？',
+    options: [
+      { label: 'A', text: '会有意识地选择和搭配颜色，追求整体视觉效果的美观', score: 3 },
+      { label: 'B', text: '偶尔会注意颜色搭配，但主要关注能不能搭起来', score: 2 },
+      { label: 'C', text: '完全不在意颜色和美观，搭起来就行', score: 1 }
+    ]
+  },
+  // ======= Visual Q7: Color (improved) =======
   {
     type: 'visual',
     typeLabel: '视觉看图',
-    question: '孩子第一眼会被哪组颜色吸引？',
+    question: '仔细观察下面三组颜色搭配，孩子第一眼会被哪组吸引？',
     visualHTML: `
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
         <div style="text-align:center;">
@@ -103,7 +136,7 @@ const questions = [
             <div class="block morandi-c"></div>
             <div class="block morandi-d"></div>
           </div>
-          <div style="font-size:11px;color:#86868b;margin-top:4px;">柔和·高级</div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">柔和·高级·莫兰迪</div>
         </div>
         <div style="text-align:center;">
           <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
@@ -113,7 +146,7 @@ const questions = [
             <div class="block bright-c"></div>
             <div class="block bright-d"></div>
           </div>
-          <div style="font-size:11px;color:#86868b;margin-top:4px;">鲜艳·明亮</div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">鲜艳·明亮·撞色</div>
         </div>
         <div style="text-align:center;">
           <div style="font-size:11px;font-weight:600;color:#86868b;margin-bottom:4px;">C</div>
@@ -123,20 +156,20 @@ const questions = [
             <div class="block messy-c"></div>
             <div class="block messy-d"></div>
           </div>
-          <div style="font-size:11px;color:#86868b;margin-top:4px;">杂乱·混搭</div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">杂乱·混搭·无规律</div>
         </div>
       </div>`,
     options: [
-      { label: 'A', text: '柔和、舒服、高级感', score: 3 },
-      { label: 'B', text: '鲜艳、明亮、活泼', score: 2 },
-      { label: 'C', text: '没规律、随便看', score: 1 }
+      { label: 'A', text: '柔和舒服、有高级感，看起来很安静', score: 3 },
+      { label: 'B', text: '鲜艳明亮、有活力，很抢眼', score: 2 },
+      { label: 'C', text: '没什么特别感觉，都差不多', score: 1 }
     ]
   },
-  // -- Visual Q5: Composition --
+  // ======= Visual Q8: Composition (improved) =======
   {
     type: 'visual',
     typeLabel: '视觉看图',
-    question: '孩子觉得哪张图「最好看、最舒服」？',
+    question: '仔细看下面三张图，孩子觉得哪张「最好看、最舒服」？',
     visualHTML: `
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
         <div style="text-align:center;">
@@ -146,7 +179,7 @@ const questions = [
             <div class="rect"></div>
             <div class="small"></div>
           </div>
-          <div style="font-size:11px;color:#86868b;margin-top:4px;">平衡·舒服</div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">平衡有致·疏密得宜</div>
         </div>
         <div style="text-align:center;">
           <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
@@ -154,7 +187,7 @@ const questions = [
             <div class="circle"></div>
             <div class="rect"></div>
           </div>
-          <div style="font-size:11px;color:#86868b;margin-top:4px;">居中·呆板</div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">居中直接·简单明了</div>
         </div>
         <div style="text-align:center;">
           <div style="font-size:11px;font-weight:600;color:#86868b;margin-bottom:4px;">C</div>
@@ -165,20 +198,20 @@ const questions = [
             <div class="small"></div>
             <div class="small"></div>
           </div>
-          <div style="font-size:11px;color:#86868b;margin-top:4px;">杂乱·无序</div>
+          <div style="font-size:11px;color:#86868b;margin-top:4px;">杂乱分散·没有重点</div>
         </div>
       </div>`,
     options: [
-      { label: 'A', text: '画面平衡、干净舒服', score: 3 },
-      { label: 'B', text: '简单直接、一目了然', score: 2 },
-      { label: 'C', text: '都差不多', score: 1 }
+      { label: 'A', text: '画面有平衡感，疏密有致，看起来很舒服', score: 3 },
+      { label: 'B', text: '简单直接、一目了然，不复杂', score: 2 },
+      { label: 'C', text: '都差不多，看不出区别', score: 1 }
     ]
   },
-  // -- Visual Q6: Imagination --
+  // ======= Visual Q9: Imagination (improved) =======
   {
     type: 'visual',
     typeLabel: '视觉看图',
-    question: '孩子更喜欢看 / 模仿哪一种？',
+    question: '孩子更喜欢看或模仿哪一种风格的画？',
     visualHTML: `
       <div class="drawings-container">
         <div class="drawing-card">
@@ -193,7 +226,7 @@ const questions = [
             <line x1="60" y1="80" x2="80" y2="95" stroke="#ff9500" stroke-width="2" opacity="0.6"/>
             <circle cx="90" cy="25" r="5" fill="#5ac8fa" opacity="0.6"/>
           </svg>
-          <div class="drawing-label">自由·创意</div>
+          <div class="drawing-label">自由创意·独特</div>
         </div>
         <div class="drawing-card">
           <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
@@ -205,20 +238,20 @@ const questions = [
             <rect x="62" y="70" width="8" height="15" fill="#aeaeb2" rx="2"/>
             <line x1="60" y1="40" x2="60" y2="60" stroke="#d1d1d6" stroke-width="2"/>
           </svg>
-          <div class="drawing-label">标准·简笔</div>
+          <div class="drawing-label">标准简笔·规整</div>
         </div>
       </div>`,
     options: [
-      { label: 'A', text: '自由、有想象力、独一无二', score: 3 },
-      { label: 'B', text: '标准、整齐、不会出错', score: 2 },
-      { label: 'C', text: '都不感兴趣', score: 1 }
+      { label: 'A', text: '自由、有想象力、独一无二的画风', score: 3 },
+      { label: 'B', text: '标准、整齐、不容易出错的画法', score: 2 },
+      { label: 'C', text: '两种都不太感兴趣', score: 1 }
     ]
   },
-  // -- Visual Q7: Detail --
+  // ======= Visual Q10: Detail (improved) =======
   {
     type: 'visual',
     typeLabel: '视觉看图',
-    question: '孩子会觉得哪一个「更好看、更用心」？',
+    question: '孩子会觉得下面哪一个「更好看、更用心」？',
     visualHTML: `
       <div class="detail-container">
         <div class="detail-card">
@@ -235,7 +268,7 @@ const questions = [
             <div class="dot"></div>
             <div class="dot"></div>
           </div>
-          <div class="drawing-label">精致·有细节</div>
+          <div class="drawing-label">精致丰富·有细节</div>
         </div>
         <div class="detail-card">
           <div style="font-size:11px;font-weight:600;color:#ff9500;margin-bottom:4px;">B</div>
@@ -244,13 +277,13 @@ const questions = [
             <div class="dot"></div>
             <div class="dot"></div>
           </div>
-          <div class="drawing-label">简单·粗糙</div>
+          <div class="drawing-label">简单朴素·不复杂</div>
         </div>
       </div>`,
     options: [
-      { label: 'A', text: '精致、有细节、很讲究', score: 3 },
-      { label: 'B', text: '简单、大方、不复杂', score: 2 },
-      { label: 'C', text: '没感觉', score: 1 }
+      { label: 'A', text: '精致、有细节、看起来很用心', score: 3 },
+      { label: 'B', text: '简单大方、不复杂就好', score: 2 },
+      { label: 'C', text: '没太大感觉，不关心', score: 1 }
     ]
   }
 ];

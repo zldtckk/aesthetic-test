@@ -451,6 +451,48 @@ html, body {
 .detail-simple .dot:nth-child(2) { background: #c7c7cc; }
 .detail-simple .dot:nth-child(3) { background: #aeaeb2; }
 
+/* -- Q9 (new): Pattern & Rhythm -- */
+.pattern-box {
+  position: relative;
+  width: 200px;
+  height: 100px;
+  background: #f9f9fb;
+  border-radius: 10px;
+  border: 1px solid #e8e8ed;
+}
+.pattern-box .pat-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.6;
+}
+/* Rhythmic: graduated sizes */
+.pat-rhythm .pat-dot:nth-child(1) { width: 8px; height: 8px; top: 45px; left: 15px; }
+.pat-rhythm .pat-dot:nth-child(2) { width: 12px; height: 12px; top: 43px; left: 40px; }
+.pat-rhythm .pat-dot:nth-child(3) { width: 16px; height: 16px; top: 41px; left: 65px; }
+.pat-rhythm .pat-dot:nth-child(4) { width: 20px; height: 20px; top: 39px; left: 90px; }
+.pat-rhythm .pat-dot:nth-child(5) { width: 24px; height: 24px; top: 37px; left: 115px; }
+.pat-rhythm .pat-dot:nth-child(6) { width: 28px; height: 28px; top: 35px; left: 140px; }
+.pat-rhythm .pat-dot:nth-child(7) { width: 32px; height: 32px; top: 33px; left: 165px; }
+
+/* Symmetric: mirror pairs */
+.pat-sym .pat-dot:nth-child(1) { top: 30px; left: 55px; background: var(--purple); }
+.pat-sym .pat-dot:nth-child(2) { top: 30px; left: 130px; background: var(--purple); }
+.pat-sym .pat-dot:nth-child(3) { top: 55px; left: 70px; background: var(--orange); }
+.pat-sym .pat-dot:nth-child(4) { top: 55px; left: 115px; background: var(--orange); }
+.pat-sym .pat-dot:nth-child(5) { top: 15px; left: 85px; background: var(--green); }
+.pat-sym .pat-dot:nth-child(6) { top: 15px; left: 100px; background: var(--green); }
+
+/* Random: scattered */
+.pat-random .pat-dot:nth-child(1) { top: 15px; left: 25px; }
+.pat-random .pat-dot:nth-child(2) { top: 60px; left: 140px; }
+.pat-random .pat-dot:nth-child(3) { top: 30px; left: 120px; }
+.pat-random .pat-dot:nth-child(4) { top: 65px; left: 50px; }
+.pat-random .pat-dot:nth-child(5) { top: 10px; left: 155px; }
+.pat-random .pat-dot:nth-child(6) { top: 75px; left: 100px; }
+
 /* ============================================
    Loading Screen
    ============================================ */
