@@ -23,15 +23,34 @@ body {
 .header h1 { font-size: 18px; font-weight: 700; }
 .header .sub { font-size: 12px; color: #86868b; margin-top: 2px; }
 
-.search-section {
-  padding: 20px;
+.tabs {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border-bottom: 1px solid #e8e8ed;
   max-width: 600px;
   margin: 0 auto;
 }
-.search-box {
-  display: flex;
-  gap: 10px;
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #86868b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
 }
+.tab.active {
+  color: #0071e3;
+  border-bottom-color: #0071e3;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.search-section { padding: 20px; max-width: 600px; margin: 0 auto; }
+.search-box { display: flex; gap: 10px; }
 .search-box input {
   flex: 1;
   padding: 14px 16px;
@@ -45,9 +64,7 @@ body {
   transition: border-color 0.2s;
   text-transform: uppercase;
 }
-.search-box input:focus {
-  border-color: #0071e3;
-}
+.search-box input:focus { border-color: #0071e3; }
 .search-box button {
   padding: 14px 24px;
   background: #0071e3;
@@ -61,23 +78,35 @@ body {
   white-space: nowrap;
 }
 .search-box button:active { opacity: 0.8; }
-
 .hint { font-size: 12px; color: #aeaeb2; margin-top: 8px; text-align: center; }
 
-/* Report */
-#report-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0 20px 40px;
+/* Manual section */
+.manual-section { padding: 20px; max-width: 600px; margin: 0 auto; }
+.manual-section p { font-size: 14px; color: #86868b; margin-bottom: 12px; line-height: 1.6; }
+.manual-select {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-
-.not-found {
+.manual-option {
+  flex: 1;
+  min-width: 140px;
+  padding: 16px;
+  border: 2px solid #e8e8ed;
+  border-radius: 12px;
   text-align: center;
-  padding: 40px 20px;
-  color: #ff3b30;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
 }
-.not-found p { font-size: 16px; }
+.manual-option:hover { border-color: #0071e3; }
+.manual-option .badge { font-size: 28px; display: block; margin-bottom: 4px; }
+.manual-option .name { font-size: 15px; font-weight: 600; }
 
+/* Report */
+#report-container { max-width: 600px; margin: 0 auto; padding: 0 20px 40px; }
+.not-found { text-align: center; padding: 40px 20px; color: #ff3b30; }
+.not-found p { font-size: 16px; }
 .loading { text-align: center; padding: 40px; color: #86868b; }
 
 .report-header { text-align: center; margin-bottom: 24px; }
@@ -104,15 +133,8 @@ body {
   align-items: center;
 }
 .scores-bar .score-item { text-align: center; }
-.scores-bar .score-item .num {
-  font-size: 24px;
-  font-weight: 700;
-}
-.scores-bar .score-item .lbl {
-  font-size: 11px;
-  color: #86868b;
-  margin-top: 2px;
-}
+.scores-bar .score-item .num { font-size: 24px; font-weight: 700; }
+.scores-bar .score-item .lbl { font-size: 11px; color: #86868b; margin-top: 2px; }
 
 .card {
   background: #fff;
@@ -121,84 +143,35 @@ body {
   margin-bottom: 16px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
-.card h3 {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
+.card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
 .card ul { list-style: none; padding: 0; }
 .card ul li {
-  font-size: 14px;
-  color: #86868b;
-  line-height: 1.6;
-  padding-left: 16px;
-  position: relative;
-  margin-bottom: 4px;
+  font-size: 14px; color: #86868b; line-height: 1.6;
+  padding-left: 16px; position: relative; margin-bottom: 4px;
 }
-.card ul li::before {
-  content: '•';
-  position: absolute;
-  left: 4px;
-  color: #0071e3;
-}
-.card p {
-  font-size: 14px;
-  color: #86868b;
-  line-height: 1.7;
-}
+.card ul li::before { content: '•'; position: absolute; left: 4px; color: #0071e3; }
+.card p { font-size: 14px; color: #86868b; line-height: 1.7; }
 
-.keywords {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.keywords span {
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-}
+.keywords { display: flex; flex-wrap: wrap; gap: 8px; }
+.keywords span { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; }
 
-.answers-list { }
 .answer-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px;
 }
 .answer-item:last-child { border-bottom: none; }
 .answer-item .q-num {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: #86868b;
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+  background: #f0f0f0; display: flex; align-items: center;
+  justify-content: center; font-size: 12px; font-weight: 600; color: #86868b;
 }
-.answer-item .q-type {
-  font-size: 11px;
-  color: #aeaeb2;
-  flex-shrink: 0;
-  width: 40px;
-}
+.answer-item .q-type { font-size: 11px; color: #aeaeb2; flex-shrink: 0; width: 40px; }
 .answer-item .q-text { flex: 1; color: #1d1d1f; line-height: 1.4; }
-.answer-item .q-score {
-  flex-shrink: 0;
-  font-weight: 600;
-  font-size: 13px;
-  width: 30px;
-  text-align: right;
-}
+.answer-item .q-score { flex-shrink: 0; font-weight: 600; font-size: 13px; width: 30px; text-align: right; }
 
 @media (max-width: 430px) {
   .search-section { padding: 16px; }
+  .manual-section { padding: 16px; }
   #report-container { padding: 0 16px 40px; }
 }
 </style>
@@ -207,65 +180,163 @@ body {
 
 <div class="header">
   <h1>🎨 审美测试管理后台</h1>
-  <div class="sub">输入领取码查看完整测试报告</div>
+  <div class="sub">查询完整报告 · 1v1 到店解读</div>
 </div>
 
-<div class="search-section">
-  <div class="search-box">
-    <input type="text" id="codeInput" placeholder="AST-0000-XX" maxlength="12" autocomplete="off" spellcheck="false">
-    <button onclick="searchReport()">查询</button>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('search')">🔍 按码查询</div>
+  <div class="tab" onclick="switchTab('manual')">📋 手动选择</div>
+</div>
+
+<div id="tab-search" class="tab-content active">
+  <div class="search-section">
+    <div class="search-box">
+      <input type="text" id="codeInput" placeholder="AST-0000-XX" maxlength="12" autocomplete="off" spellcheck="false">
+      <button onclick="searchReport()">查询</button>
+    </div>
+    <div class="hint">输入用户测试完成后得到的领取码，例如 AST-3847-KF</div>
   </div>
-  <div class="hint">请输入用户测试完成后得到的领取码，例如 AST-3847-KF</div>
+</div>
+
+<div id="tab-manual" class="tab-content">
+  <div class="manual-section">
+    <p><strong>领取码不方便查询时</strong>，可以直接根据家长口述的测试结果等级，手动选择查看对应的完整报告模板。</p>
+    <div class="manual-select">
+      <div class="manual-option" onclick="showManualReport('talent')">
+        <span class="badge">🌟</span>
+        <div class="name" style="color:#34c759;">天赋型</div>
+      </div>
+      <div class="manual-option" onclick="showManualReport('potential')">
+        <span class="badge">🌱</span>
+        <div class="name" style="color:#ff9500;">潜力型</div>
+      </div>
+      <div class="manual-option" onclick="showManualReport('beginner')">
+        <span class="badge">🌿</span>
+        <div class="name" style="color:#af52de;">待启蒙</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="report-container"></div>
 
 <script>
+// ============================================================
+//  Report data (same as frontend)
+// ============================================================
+const reports = {
+  talent: {
+    badge: '🌟', name: '审美天赋型', tagline: 'Top 30% · 天生敏感 · 审美出众', color: '#34c759',
+    keywords: ['天生敏感', '色彩感强', '构图感好', '想象力丰富', '节奏感好'],
+    strengths: [
+      '对美有天然感知力，能主动发现和欣赏生活中的美',
+      '色彩搭配直觉出色，用色大胆且和谐',
+      '构图意识强，画面组织有balance感',
+      '审美品味突出，有自己明确的喜好和判断',
+      '对色彩情绪和视觉节奏有敏锐感知'
+    ],
+    aiValue: '创造力 + 审美力是 AI 无法替代的核心能力。孩子的天生审美敏感度，是未来最稀缺的竞争力。',
+    advice: '重点发展艺术感知与创意表达，多接触高品质的艺术作品、设计、自然美学。避免被模板化教学限制，鼓励自由创作和审美表达。'
+  },
+  potential: {
+    badge: '🌱', name: '审美潜力型', tagline: 'Top 80% · 基础良好 · 可塑性强', color: '#ff9500',
+    keywords: ['基础好', '可塑性强', '愿意感受', '潜力大', '可挖掘'],
+    strengths: [
+      '有一定的审美意识，愿意接触和感受美',
+      '对色彩、构图有基本的感知能力',
+      '经过系统引导后，审美能力提升空间极大',
+      '处于审美启蒙的关键窗口期',
+      '有培养潜质，引导后进步明显'
+    ],
+    aiValue: '审美是未来核心竞争力，现在开始培养性价比最高。孩子的审美潜力一旦被激活，将成为伴随一生的优势。',
+    advice: '系统进行审美启蒙 + 美术基础训练，从色彩认知、构图原理、艺术欣赏入手。坚持半年左右，审美气质会有明显提升。'
+  },
+  beginner: {
+    badge: '🌿', name: '审美待启蒙', tagline: 'Top 100% · 黄金启蒙期 · 潜力无限', color: '#af52de',
+    keywords: ['兴趣待激发', '感知待培养', '年龄小', '无限可能', '黄金期'],
+    strengths: [
+      '年龄尚小，审美观尚未固化，可塑性极强',
+      '正处于审美启蒙的黄金时期',
+      '没有固定思维模式，吸收能力强',
+      '一旦建立审美认知，进步会非常迅速',
+      '现在开始培养，能打下扎实的审美基础'
+    ],
+    aiValue: '知识可以被 AI 替代，但审美越早培养，未来差距越大。现在就是开始审美启蒙的最佳时机。',
+    advice: '从色彩感知、构图欣赏、艺术体验开始，用游戏化的方式建立审美认知。多带孩子观察自然、欣赏艺术作品、接触美好事物，快速建立审美基础。'
+  }
+};
+
+const lightColors = { talent: '#e8f8ee', potential: '#fff3e0', beginner: '#f3e8ff' };
+
+// ============================================================
+//  Tab switching
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab' + (name === 'search' ? ':first-child' : ':last-child')).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('report-container').innerHTML = '';
+}
+
+// ============================================================
+//  Manual report
+// ============================================================
+function showManualReport(tier) {
+  const r = reports[tier];
+  const container = document.getElementById('report-container');
+  renderFullReport({ code: '—', tier, total: '—', answers: [], scores: [] }, container);
+}
+
+// ============================================================
+//  Search by code
+// ============================================================
 function searchReport() {
   const input = document.getElementById('codeInput');
   const code = input.value.trim().toUpperCase();
-  if (!code) {
-    input.focus();
-    return;
-  }
+  if (!code) { input.focus(); return; }
 
   const container = document.getElementById('report-container');
   container.innerHTML = '<div class="loading">🔍 正在查询...</div>';
 
+  // 1. Try localStorage
+  try {
+    const data = JSON.parse(localStorage.getItem('ast_results') || '{}');
+    if (data[code]) {
+      renderFullReport({ code, ...data[code] }, container);
+      return;
+    }
+  } catch(e) {}
+
+  // 2. Try backend API
   fetch('/api/report/' + encodeURIComponent(code))
     .then(res => {
-      if (!res.ok) {
-        if (res.status === 404) throw new Error('NOT_FOUND');
-        throw new Error('SERVER_ERROR');
-      }
+      if (!res.ok) throw new Error('NOT_FOUND');
       return res.json();
     })
-    .then(data => renderReport(data, container))
-    .catch(err => {
-      if (err.message === 'NOT_FOUND') {
-        container.innerHTML = `
-          <div class="not-found">
-            <p style="font-size:40px;margin-bottom:12px;">🔍</p>
-            <p style="font-weight:600;">未找到该领取码</p>
-            <p style="font-size:14px;color:#86868b;margin-top:8px;">请确认输入正确，或检查该领取码是否已过期</p>
-          </div>`;
-      } else {
-        container.innerHTML = `
-          <div class="not-found">
-            <p style="font-size:40px;margin-bottom:12px;">⚠️</p>
-            <p style="font-weight:600;">查询失败</p>
-            <p style="font-size:14px;color:#86868b;margin-top:8px;">请检查网络连接或稍后重试</p>
-          </div>`;
-      }
+    .then(data => renderFullReport(data, container))
+    .catch(() => {
+      container.innerHTML = `
+        <div class="not-found">
+          <p style="font-size:40px;margin-bottom:12px;">🔍</p>
+          <p style="font-weight:600;">本地未找到该领取码</p>
+          <p style="font-size:14px;color:#86868b;margin-top:8px;">
+            该测试可能是在其他设备上完成的。<br>
+            请切换到「手动选择」标签，根据家长口述的等级查看报告。
+          </p>
+        </div>`;
     });
 }
 
-function renderReport(data, container) {
-  const r = data.report;
-  const lightColors = { talent: '#e8f8ee', potential: '#fff3e0', beginner: '#f3e8ff' };
-  const lightBg = lightColors[data.tier] || '#f0f0f0';
+// ============================================================
+//  Render full report
+// ============================================================
+function renderFullReport(data, container) {
+  const tier = data.tier || 'potential';
+  const r = reports[tier];
+  const lightBg = lightColors[tier] || '#f0f0f0';
 
-  const answersTotal = data.answers ? data.answers.length : 0;
+  const answersTotal = data.scores ? data.scores.length : 0;
   const maxScore = answersTotal * 3;
   const pct = maxScore > 0 ? Math.round((data.total / maxScore) * 100) : 0;
 
@@ -289,9 +360,10 @@ function renderReport(data, container) {
       <span class="badge">${r.badge}</span>
       <div class="type" style="color:${r.color}">${r.name}</div>
       <div class="tagline">${r.tagline}</div>
-      <div class="code">领取码: ${data.code}</div>
+      <div class="code">领取码: ${data.code || '—'}</div>
     </div>
 
+    ${data.total !== '—' ? `
     <div class="scores-bar">
       <div class="score-item">
         <div class="num" style="color:${r.color}">${data.total}</div>
@@ -305,7 +377,7 @@ function renderReport(data, container) {
         <div class="num" style="color:#86868b">${answersTotal}</div>
         <div class="lbl">答题数</div>
       </div>
-    </div>
+    </div>` : ''}
 
     <div class="card">
       <h3>🏷️ 关键词</h3>
@@ -322,9 +394,7 @@ function renderReport(data, container) {
 
     <div class="card">
       <h3>💡 核心优势</h3>
-      <ul>
-        ${r.strengths.map(s => `<li>${s}</li>`).join('')}
-      </ul>
+      <ul>${r.strengths.map(s => `<li>${s}</li>`).join('')}</ul>
     </div>
 
     <div class="card">
@@ -337,13 +407,16 @@ function renderReport(data, container) {
       <p>${r.advice}</p>
     </div>
 
+    ${data.timestamp && data.timestamp !== '—' ? `
     <div style="text-align:center;padding:16px 0;font-size:12px;color:#aeaeb2;">
       测试时间: ${new Date(data.timestamp).toLocaleString('zh-CN')}
-    </div>
+    </div>` : ''}
   `;
 }
 
-// Inline questions data for answer display
+// ============================================================
+//  Questions data
+// ============================================================
 const questions = [
   { typeLabel: '文字', question: '看到好看的绘本插画、风景或衣服搭配，孩子通常会？' },
   { typeLabel: '文字', question: '画画时，孩子对颜色搭配的态度是？' },
@@ -359,12 +432,10 @@ const questions = [
   { typeLabel: '视觉', question: '哪组色彩氛围让孩子感觉最舒服？（冷暖）' }
 ];
 
-// Enter key to search
+// Enter key
 document.getElementById('codeInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') searchReport();
 });
-
-// Auto-capitalize input
 document.getElementById('codeInput').addEventListener('input', function() {
   this.value = this.value.toUpperCase();
 });

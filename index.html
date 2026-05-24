@@ -549,30 +549,17 @@ function showResults() {
   const tier = getTier(total);
   const report = reports[tier];
   const claimCode = generateCode();
-  const baseUrl = window.location.origin.includes('localhost')
-    ? 'http://localhost:3000'
-    : window.location.origin;
 
-  // Submit to backend
-  fetch(baseUrl + '/api/submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      code: claimCode,
-      tier: tier,
-      total: total,
-      answers: answers,
-      scores: scores,
-      timestamp: new Date().toISOString()
-    })
-  }).catch(() => {
-    // Backend offline — store locally as fallback
+  // Store locally
+  try {
     const data = JSON.parse(localStorage.getItem('ast_results') || '{}');
     data[claimCode] = { tier, total, answers, scores, timestamp: new Date().toISOString() };
     localStorage.setItem('ast_results', JSON.stringify(data));
-  });
+  } catch (e) {
+    // localStorage unavailable
+  }
 
-  // Show simplified result after short delay
+  // Show simplified result
   setTimeout(() => {
     const container = document.getElementById('reportContent');
 
