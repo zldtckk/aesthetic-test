@@ -13,9 +13,12 @@
 
   <!-- ==================== Welcome ==================== -->
   <div id="welcome" class="screen active">
-    <div class="welcome-badge">免费测评</div>
-    <div class="welcome-icon">🎨</div>
-    <h1>少儿审美敏感度测试</h1>
+    <div class="welcome-badge" id="welcomeBadge">免费测评</div>
+    <div class="welcome-icon" id="welcomeIcon">🎨</div>
+    <h1 id="welcomeTitle">少儿审美敏感度测试</h1>
+    <div class="org-banner" id="orgBanner" style="display:none;margin-bottom:16px;padding:8px 16px;background:#fff;border-radius:12px;font-size:13px;color:#86868b;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      🏪 由 <strong style="color:#0071e3;" id="orgNameDisplay"></strong> 提供
+    </div>
     <p class="subtitle">5 分钟，发现孩子的审美天赋</p>
     <div class="welcome-sell">
       <p><strong>AI 时代，审美是不可替代的核心竞争力。</strong></p>
@@ -435,6 +438,30 @@ const reports = {
 };
 
 // ============================================================
+//  Org Context (multi-tenant)
+// ============================================================
+let orgId = null;
+let orgName = null;
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const orgParam = params.get('org');
+  if (orgParam) {
+    orgId = orgParam;
+    fetch('/api/institution/' + encodeURIComponent(orgParam))
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data && data.name) {
+          orgName = data.name;
+          document.getElementById('orgNameDisplay').textContent = data.name;
+          document.getElementById('orgBanner').style.display = 'block';
+          document.getElementById('welcomeTitle').textContent = data.name + ' · 审美敏感度测试';
+        }
+      })
+      .catch(() => {});
+  }
+})();
+
+// ============================================================
 //  App State
 // ============================================================
 let currentQuestion = 0;
@@ -557,6 +584,23 @@ function showResults() {
     localStorage.setItem('ast_results', JSON.stringify(data));
   } catch (e) {
     // localStorage unavailable
+  }
+
+  // Submit to server if org context
+  if (orgId) {
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        org_id: orgId,
+        code: claimCode,
+        tier,
+        total,
+        answers,
+        scores,
+        timestamp: new Date().toISOString()
+      })
+    }).catch(() => {});
   }
 
   // Show simplified result

@@ -19,9 +19,13 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .header h1 { font-size: 18px; font-weight: 700; }
 .header .sub { font-size: 12px; color: #86868b; margin-top: 2px; }
+.header .back-link { font-size: 13px; color: #0071e3; text-decoration: none; font-weight: 500; white-space: nowrap; }
 
 .tabs {
   display: flex;
@@ -248,8 +252,11 @@ body {
 <body>
 
 <div class="header">
-  <h1>🎨 审美测试管理后台</h1>
-  <div class="sub">查询完整报告 · 1v1 到店解读</div>
+  <div>
+    <h1>🎨 审美测试管理后台</h1>
+    <div class="sub">查询完整报告 · 1v1 到店解读</div>
+  </div>
+  <a href="dashboard.html" class="back-link">← 返回机构后台</a>
 </div>
 
 <div class="tabs">
@@ -756,6 +763,16 @@ document.getElementById('codeInput').addEventListener('keydown', e => {
 document.getElementById('codeInput').addEventListener('input', function() {
   this.value = this.value.toUpperCase();
 });
+
+// Auto-search from URL param
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  if (code) {
+    document.getElementById('codeInput').value = code.toUpperCase();
+    setTimeout(searchReport, 300);
+  }
+})();
 </script>
 
 </body>

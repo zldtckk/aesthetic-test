@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机构后台 - 审美测试</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  min-height: 100vh;
+}
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e8e8ed;
+  padding: 16px 20px;
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-left h1 { font-size: 18px; font-weight: 700; }
+.header-left .org-name { font-size: 12px; color: #86868b; margin-top: 2px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.header-right a {
+  font-size: 13px; color: #0071e3; text-decoration: none; font-weight: 500;
+  padding: 6px 12px; border-radius: 8px; transition: background 0.2s;
+}
+.header-right a:hover { background: #f0f7ff; }
+.logout-btn {
+  padding: 6px 12px; background: none; border: 1px solid #e8e8ed;
+  border-radius: 8px; font-size: 13px; font-family: inherit; color: #86868b;
+  cursor: pointer; transition: all 0.2s;
+}
+.logout-btn:hover { border-color: #ff3b30; color: #ff3b30; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+/* Stats */
+.stats-row { display: flex; gap: 12px; margin-bottom: 20px; }
+.stat-card {
+  flex: 1; background: #fff; border-radius: 14px; padding: 16px;
+  text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.stat-card .num { font-size: 28px; font-weight: 700; }
+.stat-card .lbl { font-size: 12px; color: #86868b; margin-top: 2px; }
+
+/* Org link */
+.org-link-box {
+  background: #fff; border-radius: 14px; padding: 16px 20px;
+  margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.org-link-box .lbl { font-size: 13px; color: #86868b; }
+.org-link-box .link { font-size: 14px; font-weight: 600; color: #0071e3; word-break: break-all; }
+.org-link-box .copy-btn {
+  flex-shrink: 0; padding: 8px 16px; background: #0071e3; color: #fff;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+}
+.org-link-box .copy-btn:active { opacity: 0.8; }
+
+/* Table */
+.table-card {
+  background: #fff; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.table-header {
+  padding: 16px 20px; border-bottom: 1px solid #e8e8ed;
+  font-size: 15px; font-weight: 600;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.table-header .refresh-btn {
+  padding: 4px 12px; background: none; border: 1px solid #e8e8ed;
+  border-radius: 6px; font-size: 12px; font-family: inherit; color: #86868b;
+  cursor: pointer; transition: all 0.2s;
+}
+.table-header .refresh-btn:hover { border-color: #0071e3; color: #0071e3; }
+table { width: 100%; border-collapse: collapse; }
+th {
+  font-size: 12px; font-weight: 600; color: #86868b;
+  text-align: left; padding: 12px 16px; border-bottom: 1px solid #e8e8ed;
+  background: #fafafa;
+}
+td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafafa; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.view-btn {
+  padding: 4px 12px; border: none; border-radius: 6px;
+  font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+  color: #fff;
+}
+.empty-state { text-align: center; padding: 40px 20px; color: #86868b; }
+.empty-state p { margin-top: 8px; font-size: 14px; }
+
+.loading { text-align: center; padding: 40px; color: #86868b; }
+.error-msg { text-align: center; padding: 20px; color: #ff3b30; }
+
+@media (max-width: 600px) {
+  .stats-row { gap: 8px; }
+  .stat-card .num { font-size: 22px; }
+  th, td { padding: 10px 12px; font-size: 13px; }
+  .org-link-box { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div>
+      <h1>🎨 测试报告后台</h1>
+      <div class="org-name" id="orgNameDisplay"></div>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="admin.html">📋 完整报告</a>
+    <button class="logout-btn" onclick="logout()">退出</button>
+  </div>
+</div>
+
+<div class="container" id="app">
+  <div class="loading">正在加载...</div>
+</div>
+
+<script>
+const tierColors = { talent: '#34c759', potential: '#ff9500', beginner: '#af52de' };
+const tierNames = { talent: '审美天赋型', potential: '审美潜力型', beginner: '审美待启蒙' };
+
+// Check auth
+const token = localStorage.getItem('ast_auth_token');
+const orgId = localStorage.getItem('ast_org_id');
+const orgName = localStorage.getItem('ast_org_name');
+
+if (!token || !orgId) {
+  window.location.href = 'login.html';
+}
+
+document.getElementById('orgNameDisplay').textContent = orgName || '';
+
+function logout() {
+  localStorage.removeItem('ast_org_id');
+  localStorage.removeItem('ast_org_name');
+  localStorage.removeItem('ast_auth_token');
+  localStorage.removeItem('ast_brand_color');
+  window.location.href = 'login.html';
+}
+
+function loadDashboard() {
+  const app = document.getElementById('app');
+
+  fetch('/api/reports', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.error) {
+      if (data.error === '请先登入' || data.error === '登入已过期，请重新登入') {
+        logout();
+        return;
+      }
+      app.innerHTML = '<div class="error-msg">' + data.error + '</div>';
+      return;
+    }
+
+    const reports = data.reports || [];
+    const templates = data.templates || {};
+    const total = reports.length;
+    const byTier = {};
+    reports.forEach(r => { byTier[r.tier] = (byTier[r.tier] || 0) + 1; });
+
+    const baseUrl = window.location.origin;
+    const orgLink = baseUrl + '/?org=' + orgId;
+
+    let rows = '';
+    if (reports.length === 0) {
+      rows = '<tr><td colspan="5"><div class="empty-state">📭 暂无测试报告<p>将您的专属链接发给家长，测试完成后报告将自动出现在这里</p></div></td></tr>';
+    } else {
+      reports.forEach(r => {
+        const color = (templates[r.tier] && templates[r.tier].color) || tierColors[r.tier] || '#86868b';
+        rows += `<tr>
+          <td><span class="code-cell">${r.code}</span></td>
+          <td><span class="tier-badge" style="background:${color}20;color:${color}">${tierNames[r.tier] || r.tier}</span></td>
+          <td>${r.total}<span style="color:#aeaeb2;font-size:12px;">/36</span></td>
+          <td style="color:#86868b;font-size:13px;">${r.timestamp ? new Date(r.timestamp).toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—'}</td>
+          <td><a href="admin.html?code=${r.code}" target="_blank"><button class="view-btn" style="background:${color}">查看</button></a></td>
+        </tr>`;
+      });
+    }
+
+    app.innerHTML = `
+      <div class="org-link-box">
+        <div>
+          <div class="lbl">📢 您的专属测试链接</div>
+          <div class="link">${orgLink}</div>
+        </div>
+        <button class="copy-btn" onclick="copyLink('${orgLink}')">📋 复制链接</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="num">${total}</div><div class="lbl">总报告数</div></div>
+        <div class="stat-card"><div class="num" style="color:#34c759;">${byTier.talent || 0}</div><div class="lbl">天赋型</div></div>
+        <div class="stat-card"><div class="num" style="color:#ff9500;">${byTier.potential || 0}</div><div class="lbl">潜力型</div></div>
+        <div class="stat-card"><div class="num" style="color:#af52de;">${byTier.beginner || 0}</div><div class="lbl">待启蒙</div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span>📋 测试报告列表</span>
+          <button class="refresh-btn" onclick="loadDashboard()">🔄 刷新</button>
+        </div>
+        <table>
+          <thead><tr>
+            <th>领取码</th><th>等级</th><th>得分</th><th>时间</th><th>操作</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  })
+  .catch(e => {
+    app.innerHTML = '<div class="error-msg">⚠️ 无法连接到服务器，请确认服务已启动</div>';
+  });
+}
+
+function copyLink(link) {
+  navigator.clipboard.writeText(link).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ 已复制';
+    setTimeout(() => { btn.textContent = '📋 复制链接'; }, 2000);
+  });
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>
