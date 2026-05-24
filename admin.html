@@ -296,7 +296,8 @@ body {
 const reports = {
   talent: {
     badge: '🌟', name: '审美天赋型', color: '#34c759',
-    dimColor: ['#1a8a3f', '#2d9f4e', '#3db45e', '#4ec96e', '#5fde7e'],
+    dimColor: ['#1a8a3f', '#2d9f4e', '#3db45e', '#4ec96e', '#5fde7e', '#6ff08e'],
+    childType: '偏视觉型——注重画面整体感和秩序，同时也具备情感表达能力，两种认知模式协调发展',
     overview: `
       <p>亲爱的家长，恭喜您的孩子在本次审美敏感度测评中展现出<strong>卓越的审美天赋</strong>！</p>
       <p>在全部六个维度的评估中，孩子的表现均处于同龄人中的领先水平。这不仅仅意味着孩子"喜欢画画"或"觉得好看"——测试结果清晰地表明，孩子对<strong>色彩、构图、细节、节奏</strong>有着与生俱来的敏感度和判断力，这是一种深层的审美认知能力，远超出简单的视觉偏好。</p>
@@ -342,6 +343,14 @@ const reports = {
         detail: `<p>在细节感知维度，孩子展现了<strong>超出年龄的敏锐度</strong>。ta能够注意到精致与粗糙的差别，对"用心"和"随意"有清晰的判断。</p>
         <p>"细节决定成败"不仅仅是一句口号。对细节的敏感度直接关联到<strong>专注力、观察力和品质追求</strong>。具备这种能力的孩子，在未来的学习和工作中，会自然而然地追求卓越，不满足于"差不多"。</p>
         <p>在日常中，您可能发现孩子会注意到玩具上的小装饰、绘本里的隐藏细节、或者衣服上的精致花纹。这些都不是偶然——这是孩子在用ta的审美雷达扫描世界。</p>`
+      },
+      {
+        name: '再现与表现认知',
+        icon: '🖼️',
+        score: 5,
+        detail: `<p>这是学术研究中衡量审美发展水平的<strong>核心维度</strong>。根据帕森斯（Parsons, 1987）的审美判断发展理论，儿童对艺术作品的理解从"画了什么"（题材）逐步发展到"怎么画的"（形式与表现）。</p>
+        <p>您的孩子已经超越了"画得像就是好"的初级阶段，开始能够感知作品的<strong>风格特点、情感表达和形式美感</strong>。根据加德纳（Gardner）哈佛零点项目的研究，这一能力通常在9-13岁才开始形成，而您的孩子在这方面表现出<strong>超越同龄人的成熟度</strong>。</p>
+        <p>这意味着孩子在欣赏艺术作品时，不只是问"这是什么"，还会关注"它给我的感觉是什么""它是怎么画出来的"——这是高级审美思维的萌芽，是未来艺术鉴赏力和创造性思维的<strong>核心基础</strong>。</p>`
       }
     ],
     advice: `
@@ -364,7 +373,8 @@ const reports = {
   },
   potential: {
     badge: '🌱', name: '审美潜力型', color: '#ff9500',
-    dimColor: ['#cc7a00', '#db8c00', '#eb9e00', '#fab000', '#ffc233'],
+    dimColor: ['#cc7a00', '#db8c00', '#eb9e00', '#fab000', '#ffc233', '#ffd666'],
+    childType: '偏中间型——兼具视觉观察力和情感感受力，两种认知模式均有发展空间，有很好的培养弹性',
     overview: `
       <p>亲爱的家长，感谢您带孩子参与本次审美敏感度测评！孩子的测试结果显示，ta处于<strong>审美潜力型</strong>阶段——这是最令人期待的状态！</p>
       <p>"潜力型"意味着孩子已经具备了<strong>良好的审美基础</strong>，对美有一定的感知力和兴趣，正处在审美启蒙的<strong>最佳窗口期</strong>。此时，正确的引导和系统的培养，将让孩子的审美能力实现爆发式的提升。</p>
@@ -410,6 +420,14 @@ const reports = {
         detail: `<p>在细节感知维度，孩子处于<strong>逐步发展的阶段</strong>。ta对明显的精致与粗糙有基本的辨别能力，但对更细微的差异和质感变化还不够敏感。</p>
         <p>细节感知能力就像肌肉一样——<strong>越用越发达</strong>。在日常生活中，孩子可能没有养成主动观察细节的习惯，这不是能力问题，而是注意力分配的问题。</p>
         <p><strong>提升方向：</strong>玩"找不同"游戏、观察树叶的脉络、对比不同布料的触感、欣赏绘本里的细节插画。通过有趣的观察游戏，逐步培养孩子"慢下来看细节"的习惯。</p>`
+      },
+      {
+        name: '再现与表现认知',
+        icon: '🖼️',
+        score: 3,
+        detail: `<p>在再现与表现认知维度，孩子处于<strong>过渡阶段</strong>。根据帕森斯（Parsons, 1987）的审美判断理论，这一阶段的孩子开始从"画的是什么"（题材关注）向"画得怎么样"（形式关注）转变。</p>
+        <p>孩子目前仍以"像不像"作为主要的审美判断标准，这完全符合7-10岁儿童的典型认知特征（加德纳称之为"写实高峰阶段"）。同时，孩子已开始展现出对画面<strong>情感和氛围</strong>的初步感知，这是走向更高审美阶段的萌芽信号。</p>
+        <p><strong>提升方向：</strong>引导孩子关注"画面给你什么感觉"而非仅仅"画的是什么"。比如在看绘本时，可以问"这一页的颜色让你觉得开心还是紧张？"——帮助孩子建立从题材到形式的审美桥梁。</p>`
       }
     ],
     advice: `
@@ -432,7 +450,8 @@ const reports = {
   },
   beginner: {
     badge: '🌿', name: '审美待启蒙', color: '#af52de',
-    dimColor: ['#8833c4', '#9a44d6', '#ac55e8', '#be66f0', '#d077f8'],
+    dimColor: ['#8833c4', '#9a44d6', '#ac55e8', '#be66f0', '#d077f8', '#e288ff'],
+    childType: '偏触觉型——更关注主观感受和情感体验，对客观写实的关注度尚在发展中，激发潜力后可形成独特的表达风格',
     overview: `
       <p>亲爱的家长，欢迎来到审美启蒙的世界！孩子的测试结果显示目前处于<strong>审美待启蒙</strong>阶段——这绝不是一个需要担心的结果，恰恰相反，这是一个<strong>充满希望的起点</strong>！</p>
       <p>每个孩子的审美敏感度发展节奏不同。有些孩子像早春的花朵早早绽放，有些孩子则像深秋的果实需要更多的时间沉淀。<strong>6-12岁正是审美启蒙的黄金时期</strong>，孩子的审美观尚未固化，像一张白纸，现在开始培养，可以描绘出最美的画卷。</p>
@@ -478,6 +497,14 @@ const reports = {
         detail: `<p>在细节感知维度，孩子目前对视觉细节的关注度<strong>尚待开发</strong>。ta倾向于关注整体而非局部，对精致与粗糙之间的差异缺乏敏感。</p>
         <p>这其实反映了孩子的一个特点——ta可能是一个<strong>大格局思维者</strong>，更关注宏观而非微观。这种思维模式本身不是缺点，只是在审美素养的构建中，需要补充"微观视角"的训练。</p>
         <p><strong>启蒙方向：</strong>用游戏的方式培养观察力——"寻宝游戏"（找一找房间里有几个圆形的东西）、"放大镜观察"（看一片树叶的脉络）、"对比游戏"（比一比两个相似物品的差异）。把观察变成好玩的游戏，孩子会逐渐爱上"发现"的乐趣。</p>`
+      },
+      {
+        name: '再现与表现认知',
+        icon: '🖼️',
+        score: 2,
+        detail: `<p>在再现与表现认知维度，孩子处于<strong>审美判断的初始阶段</strong>。根据帕森斯（Parsons）的审美发展理论，这一阶段的儿童主要依据<strong>个人偏好和题材吸引力</strong>来做审美判断——"我喜欢因为它好看"或"因为里面有我喜欢的动物"。</p>
+        <p>这是完全正常的审美发展起点。4-7岁儿童的典型特征就是以自我为中心的主观偏好，他们还不太关注"画得像不像"或"技法好不好"。孩子目前的审美认知正处在这个自然起始点，接下来将向<strong>写实认知阶段</strong>发展。</p>
+        <p><strong>启蒙方向：</strong>这个阶段最重要的是提供丰富的审美体验，不做评判性要求。多带孩子接触不同风格的艺术作品，用开放式的提问引导观察——"你在这幅画里看到了什么？""你觉得画家为什么选这个颜色？"——逐步帮助孩子建立更丰富的审美参照框架。</p>`
       }
     ],
     advice: `
@@ -641,6 +668,35 @@ function renderFullReport(data, container) {
     <div class="card">
       <h3>🔬 五大核心维度分析</h3>
       ${dimsHTML}
+    </div>
+
+    <!-- 儿童类型倾向 -->
+    <div class="card">
+      <h3>🧬 儿童审美类型倾向</h3>
+      <p style="font-size:14px;line-height:1.8;color:#515154;">
+        根据罗恩菲德（Lowenfeld）的美术心理类型理论，儿童在审美认知上存在天然的类型差异。
+        了解孩子的类型倾向，有助于因材施教：
+      </p>
+      <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:120px;background:#f0f7ff;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:24px;">👁️</div>
+          <div style="font-size:12px;font-weight:600;margin-top:4px;">视觉型</div>
+          <div style="font-size:11px;color:#86868b;">关注整体与写实</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#fdf0ff;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:24px;">🤲</div>
+          <div style="font-size:12px;font-weight:600;margin-top:4px;">触觉型</div>
+          <div style="font-size:11px;color:#86868b;">关注感受与表达</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#f5f5f7;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:24px;">⚖️</div>
+          <div style="font-size:12px;font-weight:600;margin-top:4px;">中间型</div>
+          <div style="font-size:11px;color:#86868b;">两者兼而有之</div>
+        </div>
+      </div>
+      <p style="font-size:14px;line-height:1.8;margin-top:12px;color:#515154;">
+        ${r.childType || '暂无法判断具体类型倾向，建议到店由专业老师进一步观察评估。'}
+      </p>
     </div>
 
     <!-- 综合发展建议 -->
